@@ -224,19 +224,27 @@ require('lazy').setup({
   {
     'vim-test/vim-test',
     config = function()
-      vim.api.nvim_create_user_command('PyTestPoetryDockerCompose', 
+      vim.api.nvim_create_user_command('PyTestDockerCompose',
         function(opts)
+          local cmd_string = 'test' .. opts.fargs[1]
+          print(cmd_string)
           vim.cmd([[
             let test#python#runner = 'pytest'
-            let test#python#pytest#executable = 'docker compose run web py.test'
+            let test#python#pytest#executable = 'docker compose run web ' .. cmd_string  .. ' test'
           ]])
-        end, {})
+        end,
+        { 
+          nargs = 1,
+          complete = function(ArgLead, CmdLine, CursorPos)
+          return { 'web', 'app' }
+          end,
+        })
 
-      vim.api.nvim_create_user_command('DjangoPoetryDockerCompose', 
+      vim.api.nvim_create_user_command('DjangoDockerCompose',
         function(opts)
           vim.cmd([[
-            let test#python#runner = 'pytest'
-            let test#python#django#executable = 'docker compose run web poetry python manage.py test'
+            let test#python#runner = 'djangotest'
+            let test#python#djangotest#executable = 'docker compose run web python manage.py test'
           ]])
         end, {})
     end
