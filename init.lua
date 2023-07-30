@@ -230,15 +230,9 @@ require('lazy').setup({
           print(cmd_string)
           vim.cmd([[
             let test#python#runner = 'pytest'
-            let test#python#pytest#executable = 'docker compose run web ' .. cmd_string  .. ' test'
+            let test#python#pytest#executable = 'docker compose run web py.test'
           ]])
-        end,
-        { 
-          nargs = 1,
-          complete = function(ArgLead, CmdLine, CursorPos)
-          return { 'web', 'app' }
-          end,
-        })
+        end, {})
 
       vim.api.nvim_create_user_command('DjangoDockerCompose',
         function(opts)
