@@ -226,8 +226,6 @@ require('lazy').setup({
     config = function()
       vim.api.nvim_create_user_command('PyTestDockerCompose',
         function(opts)
-          local cmd_string = 'test' .. opts.fargs[1]
-          print(cmd_string)
           vim.cmd([[
             let test#python#runner = 'pytest'
             let test#python#pytest#executable = 'docker compose run web py.test'
