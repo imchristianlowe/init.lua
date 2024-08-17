@@ -216,7 +216,8 @@ require('lazy').setup({
     'ahmedkhalf/project.nvim',
     config = function()
       require('project_nvim').setup{
-        detection_methods = { "pattern", "lsp" }
+        detection_methods = { "pattern", "lsp" },
+        patterns = { ".git", "src" },
       }
     end
   },
@@ -241,6 +242,26 @@ require('lazy').setup({
         end, {})
     end
   },
+  {
+    'kristijanhusak/vim-dadbod-ui',
+    dependencies = {
+      { 'tpope/vim-dadbod', lazy = true },
+      { 'kristijanhusak/vim-dadbod-completion', ft = { 'sql', 'mysql', 'plsql' }, lazy = true },
+    },
+    cmd = {
+      'DBUI',
+    'DBUIToggle',
+    'DBUIAddConnection',
+    'DBUIFindBuffer',
+    },
+    init = function()
+      vim.g.db_ui_use_nerd_fonts = 1
+    end,
+  },
+  {
+    -- amongst your other plugins
+    {'akinsho/toggleterm.nvim', version = "*", config = true}
+  }
 }, {})
 
 -- [[ Setting options ]]
@@ -314,6 +335,16 @@ require('telescope').setup {
         ['<C-u>'] = false,
         ['<C-d>'] = false,
       },
+    },
+    vimgrep_arguments = {
+      'rg',
+      '--color=never',
+      '--no-heading',
+      '--with-filename',
+      '--line-number',
+      '--column',
+      '--smart-case',
+      '--hidden',
     },
   },
 }
@@ -575,3 +606,5 @@ cmp.setup {
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+--#vim.opt.shell = '/bin/zsh\ -i'
+--vim.g.terminal_emulator='zsh'
