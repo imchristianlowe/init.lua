@@ -217,7 +217,7 @@ require('lazy').setup({
     config = function()
       require('project_nvim').setup{
         detection_methods = { "pattern", "lsp" },
-        patterns = { ".git", "src" },
+        patterns = { ".git", "src", "docker-compose.yml" },
       }
     end
   },
@@ -390,7 +390,8 @@ end
 
 vim.keymap.set('n', '<leader>tg', _lazygit_toggle, { desc = '[T]oggle [G]it' })
 
-local LazyDockerCompose = Terminal:new({cmd="docker compose up", direction="horizontal",close_on_exit=false, hidden=true})
+-- ToggleDockerCompose
+local LazyDockerCompose = Terminal:new({cmd="docker compose up", autochdir=true,direction="horizontal",close_on_exit=false, hidden=true})
 function _lazydockercompose_toggle()
   LazyDockerCompose:toggle()
 end
