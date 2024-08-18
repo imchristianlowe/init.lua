@@ -260,8 +260,12 @@ require('lazy').setup({
   },
   {
     -- amongst your other plugins
-    {'akinsho/toggleterm.nvim', version = "*", config = true}
-  }
+    -- {'akinsho/toggleterm.nvim', version = "*", config = true}
+    {'akinsho/toggleterm.nvim', version = "*", opts = {
+      direction = 'float',
+      autochdir = true
+    }},
+  },
 }, {})
 
 -- [[ Setting options ]]
@@ -374,6 +378,24 @@ vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { de
 vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 vim.keymap.set('n', '<leader>sp', require('telescope').extensions.projects.projects, { desc = '[S]earch [P]rojects' })
+vim.keymap.set('n', '<leader>tt', require('toggleterm').toggle, { desc = '[T]oggle [T]erminal' })
+
+-- ToggleGit
+local Terminal  = require('toggleterm.terminal').Terminal
+local lazygit = Terminal:new({ cmd = "lazygit", hidden = true })
+
+function _lazygit_toggle()
+  lazygit:toggle()
+end
+
+vim.keymap.set('n', '<leader>tg', _lazygit_toggle, { desc = '[T]oggle [G]it' })
+
+local LazyDockerCompose = Terminal:new({cmd="docker compose up", direction="horizontal",close_on_exit=false, hidden=true})
+function _lazydockercompose_toggle()
+  LazyDockerCompose:toggle()
+end
+
+vim.keymap.set('n', '<leader>td', _lazydockercompose_toggle, { desc = '[T]oggle [D]ocker' })
 
 -- Navigate buffers
 vim.keymap.set('n', '<C-j>',
