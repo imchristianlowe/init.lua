@@ -165,9 +165,10 @@ require('lazy').setup({
     -- Enable `lukas-reineke/indent-blankline.nvim`
     -- See `:help indent_blankline.txt`
     opts = {
-      char = '┊',
-      show_trailing_blankline_indent = false,
+      -- char = '┊',
+      -- show_trailing_blankline_indent = false,
     },
+    main = "ibl",
   },
 
   -- "gc" to comment visual regions/lines
@@ -189,6 +190,10 @@ require('lazy').setup({
     end,
   },
 
+  {
+      "nvim-telescope/telescope-file-browser.nvim",
+      dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" }
+  },
   {
     -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
@@ -351,14 +356,31 @@ require('telescope').setup {
       '--hidden',
     },
   },
+  file_browser = {
+    theme = "ivy",
+    -- disables netrw and use telescope-file-browser in its place
+    hijack_netrw = true,
+    -- mappings = {
+    --   -- ["i"] = {
+    --   --   -- your custom insert mode mappings
+    --   -- },
+    --   -- ["n"] = {
+    --   --   -- your custom normal mode mappings
+    --   -- },
+    -- },
+  },
 }
+
 
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
 
 
 -- Enable projects in telescope https://github.com/ahmedkhalf/project.nvim --
-require('telescope').load_extension('projects')
+pcall(require('telescope').load_extension, 'projects')
+-- To get telescope-file-browser loaded and working with telescope,
+-- you need to call load_extension, somewhere after setup function:
+pcall(require("telescope").load_extension, "file_browser")
 
 -- See `:help telescope.builtin`
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
@@ -379,7 +401,11 @@ vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 vim.keymap.set('n', '<leader>sp', require('telescope').extensions.projects.projects, { desc = '[S]earch [P]rojects' })
 vim.keymap.set('n', '<leader>tt', require('toggleterm').toggle, { desc = '[T]oggle [T]erminal' })
+-- vim.keymap.set("n", "<leader>fb", ":Telescope file_browser<CR>")
 
+-- Alternatively, using lua API
+-- vim.keymap.set("n", "<space>fb", require("telescope").extensions.file_browser.file_browser, { desc = '[F]ile [B]rowser' })
+vim.keymap.set("n", "<space>fb", ":Telescope file_browser path=%:p:h select_buffer=true<CR>")
 -- ToggleGit
 local Terminal  = require('toggleterm.terminal').Terminal
 local lazygit = Terminal:new({ cmd = "lazygit", hidden = true })
